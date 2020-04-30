@@ -10,7 +10,7 @@
     "build:parcel": "rimraf dist-parcel && parcel build src/index.html",
     "start:parcel": "parcel src/index.html",
     "build:webpack": "webpack --mode production --progress",
-    "start:webpack": "webpack-dev-server --open --progress --mode development",
+    "start:webpack": "webpack-dev-server --progress --mode development",
     "clean": "rimraf dist-parcel dist-webpack .parcel-cache"
   },
   "devDependencies": {

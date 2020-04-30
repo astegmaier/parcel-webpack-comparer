@@ -1,0 +1,25 @@
+{
+  "name": "parcel-webpack-comparer",
+  "description": "A project to help compare bundle size and build times between parcel2 and webpack.",
+  "version": "1.0.0",
+  "main": "dist-parcel/index.html",
+  "repository": "https://github.com/astegmaier/parcel-webpack-comparer.git",
+  "author": "Andrew Stegmaier <ansteg@microsoft.com>",
+  "license": "MIT",
+  "scripts": {
+    "build:parcel": "rimraf dist-parcel && parcel build src/index.html",
+    "start:parcel": "parcel src/index.html",
+    "clean": "rimraf dist-parcel .parcel-cache"
+  },
+  "devDependencies": {
+    "@types/react": "^16.9.34",
+    "@types/react-dom": "^16.9.7",
+    "parcel": "2.0.0-nightly.240",
+    "rimraf": "^3.0.2",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  }
+}

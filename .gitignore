@@ -1,5 +1,6 @@
 node_modules
 dist-parcel
+dist-webpack
 .cache
 .DS_Store
 .parcel-cache

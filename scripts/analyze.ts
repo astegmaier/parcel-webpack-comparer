@@ -15,12 +15,13 @@ const WEBPACK_BUNDLE_FILE: string = "dist-webpack/main.bundle.js";
 const PARCEL_BUNDLE_FOLDER: string = "dist-parcel";
 
 // Make sure we actually have a bundles to analyze.
-const parcelOutput = fs.readdirSync("dist-parcel");
-const parcelBundleFiles = parcelOutput.filter(fileName => path.extname(fileName) === ".js");
-assert(parcelBundleFiles.length > 0, "We didn't find any parcel bundles to analyze. Try running 'yarn build:parcel'.");
-assert(parcelBundleFiles.length === 1, "We found more than one parcel bundle in the parcel-dist folder. Delete the ones you don't want to analyze.")
-const parcelBundleFile = path.join(PARCEL_BUNDLE_FOLDER, parcelBundleFiles[0]);
-assert(fs.existsSync(WEBPACK_BUNDLE_FILE), "We didn't find any parcel bundles to analyze. Try running 'yarn build:webpack'.");
+let parcelOutput;
+try { parcelOutput = fs.readdirSync("dist-parcel"); } catch(e) {}
+const parcelBundleFiles = parcelOutput?.filter(fileName => path.extname(fileName) === ".js");
+assert((parcelBundleFiles?.length ?? 0) > 0, "We didn't find any parcel bundles to analyze. Try running 'yarn build:parcel'.");
+assert((parcelBundleFiles?.length ?? 0) === 1, "We found more than one parcel bundle in the parcel-dist folder. Delete the ones you don't want to analyze.")
+const parcelBundleFile = path.join(PARCEL_BUNDLE_FOLDER, parcelBundleFiles![0]);
+assert(fs.existsSync(WEBPACK_BUNDLE_FILE), "We didn't find any webpack bundles to analyze. Try running 'yarn build:webpack'.");
 
 /** The location of the bundles you want to analyze and compare. */
 const bundles: ReadonlyArray<BundleInfo> = [

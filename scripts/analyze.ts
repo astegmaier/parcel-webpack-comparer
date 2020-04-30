@@ -1,14 +1,31 @@
 import { explore } from "source-map-explorer";
 import rimraf from "rimraf";
+import fs from "fs";
+import assert from "assert";
+import path from "path";
 import { saveAdditionAnalyses, saveOutputs, getOutputFormatsFromArgs, BundleInfo } from "./helpers";
 
 /** Where you want to output the analysis files. This script will clean this directory before outputting anything, so don't point it at a folder with files you want to keep! */
 const OUTPUT_FOLDER: string = "analyses";
 
+/** The location of the webpack bundle file */
+const WEBPACK_BUNDLE_FILE: string = "dist-webpack/main.bundle.js";
+
+/** The location of the folder containing parcel output. Because parcel will supply a different hash each time it builds, we will look for a .js file in this folder. */
+const PARCEL_BUNDLE_FOLDER: string = "dist-parcel";
+
+// Make sure we actually have a bundles to analyze.
+const parcelOutput = fs.readdirSync("dist-parcel");
+const parcelBundleFiles = parcelOutput.filter(fileName => path.extname(fileName) === ".js");
+assert(parcelBundleFiles.length > 0, "We didn't find any parcel bundles to analyze. Try running 'yarn build:parcel'.");
+assert(parcelBundleFiles.length === 1, "We found more than one parcel bundle in the parcel-dist folder. Delete the ones you don't want to analyze.")
+const parcelBundleFile = path.join(PARCEL_BUNDLE_FOLDER, parcelBundleFiles[0]);
+assert(fs.existsSync(WEBPACK_BUNDLE_FILE), "We didn't find any parcel bundles to analyze. Try running 'yarn build:webpack'.");
+
 /** The location of the bundles you want to analyze and compare. */
-const BUNDLES: ReadonlyArray<BundleInfo> = [
-  { bundleName: "parcel", bundleFile: "dist-parcel/parcel-webpack-comparer.55b3e4f7.js" },
-  { bundleName: "webpack", bundleFile: "dist-webpack/main.bundle.js" }
+const bundles: ReadonlyArray<BundleInfo> = [
+  { bundleName: "parcel", bundleFile: parcelBundleFile },
+  { bundleName: "webpack", bundleFile: WEBPACK_BUNDLE_FILE }
 ];
 
 /**
@@ -31,7 +48,7 @@ async function analyze() {
   console.log("Using source-map-explorer to analyze the bundles...");
   // Even though source-map-explorer, supports analyzing multiple bundles in a single "explore" call, we are not using this feature.
   // Each "result" here should have a _single_ bundle at <result>.bundles[0].
-  const results = await Promise.all(BUNDLES.map(bundleInfo => explore(bundleInfo.bundleFile, { replaceMap })));
+  const results = await Promise.all(bundles.map(bundleInfo => explore(bundleInfo.bundleFile, { replaceMap })));
 
   // If we were successful, delete the output directory and figure out what formats we need to save the results in.
   const outputFormats = getOutputFormatsFromArgs();
@@ -39,7 +56,7 @@ async function analyze() {
 
   // Iterate through all the results and output the base and comparison results.
   results.forEach((baseResult, index, results) => {
-    const baseName = BUNDLES[index].bundleName;
+    const baseName = bundles[index].bundleName;
     const baseBundle = baseResult.bundles[0];
 
     // Make sure we actually have a bundle to analyze.
@@ -54,7 +71,7 @@ async function analyze() {
     // Compare this result with all results to the right of it, and save them out.
     for (let comparisonIndex = index + 1; comparisonIndex < results.length; comparisonIndex++) {
       const comparisonBundle = results[comparisonIndex]?.bundles[0];
-      const comparisonName = BUNDLES[comparisonIndex]?.bundleName;
+      const comparisonName = bundles[comparisonIndex]?.bundleName;
 
       // Don't continue with the comparison if (somehow), we don't have anything to compare it with.
       if (!comparisonBundle) break;

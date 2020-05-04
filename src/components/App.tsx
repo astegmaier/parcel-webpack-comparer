@@ -1,5 +1,5 @@
 import React from "react";
-import { Provider, themes, Button } from '@fluentui/react-northstar';
+import { Provider, themes, Button } from "@fluentui/react-northstar";
 
 const App = () => (
   <Provider theme={themes.teams}>

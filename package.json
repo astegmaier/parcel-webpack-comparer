@@ -7,9 +7,9 @@
   "author": "Andrew Stegmaier <ansteg@microsoft.com>",
   "license": "MIT",
   "scripts": {
-    "build:parcel": "rimraf dist-parcel && parcel build src/index.html",
+    "build:parcel": "rimraf dist-parcel && parcel build src/index.html --dist-dir dist-parcel",
     "build:parcel:raw": "yarn build:parcel --no-minify",
-    "build:parcel:profile": "parcel build src/index.html --profile",
+    "build:parcel:profile": "parcel build src/index.html --profile --dist-dir dist-parcel",
     "start:parcel": "parcel src/index.html",
     "build:webpack": "yarn build:webpack:babel",
     "build:webpack:raw": "yarn build:webpack --raw",

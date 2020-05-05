@@ -1,4 +1,4 @@
-node_modules
+/node_modules/**
 dist-parcel
 dist-webpack
 dist-parcel-start

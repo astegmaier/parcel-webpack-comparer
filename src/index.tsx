@@ -1,5 +1,16 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import App from "./components/App";
+import { message } from "fake-package";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ready(() => {
+  const root = document.getElementById("root");
+  if (root) {
+    root.textContent = message;
+  }
+});
+
+function ready(fn: any) {
+  if (document.readyState != "loading") {
+    fn();
+  } else {
+    document.addEventListener("DOMContentLoaded", fn);
+  }
+}

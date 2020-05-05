@@ -22,8 +22,6 @@
   "devDependencies": {
     "@babel/preset-react": "^7.9.4",
     "@babel/preset-typescript": "^7.9.0",
-    "@types/react": "^16.9.34",
-    "@types/react-dom": "^16.9.7",
     "@types/rimraf": "^3.0.0",
     "@types/yargs": "^15.0.4",
     "babel-loader": "^8.1.0",
@@ -41,8 +39,6 @@
     "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
     "yargs": "^15.3.1"
   }
 }

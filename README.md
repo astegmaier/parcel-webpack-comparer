@@ -8,6 +8,8 @@ After the build output is generated, you can run `yarn analyze` to generate a co
 
 ## Bundle Size Test Results
 
+See [Parcel issue #4565](https://github.com/parcel-bundler/parcel/issues/4565#issuecomment-624240434) for a conversation on how to improve this.
+
 | Scenario                                                                                      | Bundle Size |
 | --------------------------------------------------------------------------------------------- | ----------- |
 | Build with parcel (default babel config with scope-hoisting and minification)                 | 1.11 MB     |
@@ -15,9 +17,9 @@ After the build output is generated, you can run `yarn analyze` to generate a co
 | Build with webpack (`ts-loader` with `module: es6` with scope-hoisting and minification)      | 660 KiB     |
 | Build with webpack (`ts-loader` with `module: commonjs` with scope-hoisting and minification) | 1.21 KiB    |
 
-By running `yarn analyze` after building both webpack and parcel, you can use `source-map-explorer` to see what is driving the increase in bundle size between parcel and webpack:
-
 ## Performance Test Results
+
+See [Parcel issue #4566](https://github.com/parcel-bundler/parcel/issues/4566#issuecomment-624262651) for a conversation on how to improve this.
 
 Here's a comparison of Parcel v. Webpack build times in various scenarios.
 

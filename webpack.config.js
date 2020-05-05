@@ -5,6 +5,7 @@ module.exports = (env, argv) => {
   const isProduction = argv.mode !== "development"; // default to production if nothing is specified.
   const useTsc = argv.compiler === "tsc"; // default to transpiling with babel unless tsc is specified.
   const typeCheck = false; // default to no typechecking (for apples-to-apples comparison with parcel).
+  const raw = argv.raw; // if --raw is passed, disable minifcation in production so we can examine scope-hoisting behavior.
 
   const rules = useTsc
     ? [
@@ -67,6 +68,11 @@ module.exports = (env, argv) => {
   if (isProduction) {
     const { CleanWebpackPlugin } = require("clean-webpack-plugin");
     config.plugins.push(new CleanWebpackPlugin());
+    if (raw) {
+      config.optimization = Object.assign({}, config.optimization, {
+        minimize: false,
+      });
+    }
   }
 
   /** Additional configuration for dev-mode builds. */

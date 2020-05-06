@@ -29,20 +29,31 @@ This branch is intended to help narrow down the root cause of [issue #4565](http
    export { default as message2 } from "./message2";
    ```
 
-3. The default exports are the things returned by executing a function:
+3. The default exports are wrapped within a function before being exported:
 
    **src/node_modules/fake-package/message1.js**
 
    ```js
-   const getMessage1 = () => "Hello World!";
-   export default getMessage1();
+   import { wrapper } from "./wrapper";
+   const message1 = "Hello World!";
+   export default wrapper(message1);
    ```
 
    **src/node_modules/fake-package/message2.js**
 
    ```js
-   const getMessage2 = () => "Goodbye World!";
-   export default getMessage2();
+   import { wrapper } from "./wrapper";
+   const message2 = "Goodbye World!";
+   export default wrapper(message2);
+   ```
+
+   **src/node_modules/fake-package/wrapper.js**
+
+   ```js
+   export function wrapper(string) {
+     console.log("I just wrapped a string: ", string);
+     return string;
+   }
    ```
 
 Then, in the main app, we import an use only one of the exports (`message1`):
@@ -70,7 +81,7 @@ function ready(fn: () => void) {
 
 When the bundle is built by webpack with tree-shaking, but without minification (`yarn build:webpack:raw`), you can see that the output was successfully tree-shaked - `message2` / "Goodbye World!" is not present.
 
-When the same bundle is built by parcel2 (`parcel build src/index.ts --noMinify`), `message2` / "Goodbye World!" is still in the bundle even though it is unused by the app.
+When the same bundle is built by parcel2 (`parcel build src/index.ts --noMinify`), `message2` / "Goodbye World!" is still in the bundle even though it is unused by the app. The same string ("Goodbye World!") is present in the minified build.
 
 Here is the bundle out put from parcel:
 

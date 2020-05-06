@@ -81,7 +81,7 @@ function ready(fn: () => void) {
 
 When the bundle is built by webpack with tree-shaking, but without minification (`yarn build:webpack:raw`), you can see that the output was successfully tree-shaked - `message2` / "Goodbye World!" is not present.
 
-When the same bundle is built by parcel2 (`parcel build src/index.ts --noMinify`), `message2` / "Goodbye World!" is still in the bundle even though it is unused by the app. The same string ("Goodbye World!") is present in the minified build.
+When the same bundle is built by parcel2 (`parcel build src/index.ts --no-minify`), `message2` / "Goodbye World!" is still in the bundle even though it is unused by the app. The same string ("Goodbye World!") is present in the minified build.
 
 Here is the (unminified) bundle out put from parcel:
 

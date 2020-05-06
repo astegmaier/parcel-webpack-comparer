@@ -6,7 +6,7 @@ There is a single app in the "src" folder. You can build it with Parcel2 (with d
 
 After the build output is generated, you can run `yarn analyze` to generate a comparison of the build output using `source-map-explorer`. It will put `html` and `tsv` files in the `analyses` folder that show you makeup of each build output, plus two sets of diffs (showing things that are present in parcel's build, but not webpack's, and vice versa).
 
-## simple-export branch
+## reexport-with-wrappers branch
 
 This branch is intended to help narrow down the root cause of [issue #4565](https://github.com/parcel-bundler/parcel/issues/4565) and find the set of conditions where webpack will succeed at tree-shaking, but parcel will fail.
 
@@ -14,36 +14,36 @@ This branch is intended to help narrow down the root cause of [issue #4565](http
 
 1. An index file that re-exports everything another file:
 
-**index.js**
+   **index.js**
 
-```js
-export * from "./messages";
-```
+   ```js
+   export * from "./messages";
+   ```
 
 2. The file re-exported by `index.js` contains statement that re-export the default exports of some other files:
 
-**messages.js**
+   **messages.js**
 
-```js
-export { default as message1 } from "./message1";
-export { default as message2 } from "./message2";
-```
+   ```js
+   export { default as message1 } from "./message1";
+   export { default as message2 } from "./message2";
+   ```
 
 3. The default exports are the things returned by executing a function:
 
-**message1.js**
+   **message1.js**
 
-```js
-const getMessage1 = () => "Hello World!";
-export default getMessage1();
-```
+   ```js
+   const getMessage1 = () => "Hello World!";
+   export default getMessage1();
+   ```
 
-**message2.js**
+   **message2.js**
 
-```js
-const getMessage2 = () => "Goodbye World!";
-export default getMessage2();
-```
+   ```js
+   const getMessage2 = () => "Goodbye World!";
+   export default getMessage2();
+   ```
 
 Then, in the main app, we import an use only one of the exports (`message1`):
 

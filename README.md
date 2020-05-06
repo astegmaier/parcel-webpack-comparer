@@ -10,7 +10,7 @@ After the build output is generated, you can run `yarn analyze` to generate a co
 
 This branch is intended to help narrow down the root cause of [issue #4565](https://github.com/parcel-bundler/parcel/issues/4565) and find the set of conditions where webpack will succeed at tree-shaking, but parcel will fail.
 
-`src/node_modules/fake-package` has the following:
+`src/node_modules/fake-package` has the following three characteristics. In my tests, it appears that all three are necessary in order to get a repro:
 
 1. An index file that re-exports everything another file:
 

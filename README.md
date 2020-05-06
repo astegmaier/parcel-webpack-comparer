@@ -14,7 +14,7 @@ This branch is intended to help narrow down the root cause of [issue #4565](http
 
 1. An index file that re-exports everything another file:
 
-   **index.js**
+   **src/node_modules/fake-package/index.js**
 
    ```js
    export * from "./messages";
@@ -22,7 +22,7 @@ This branch is intended to help narrow down the root cause of [issue #4565](http
 
 2. The file re-exported by `index.js` contains statement that re-export the default exports of some other files:
 
-   **messages.js**
+   **src/node_modules/fake-package/messages.js**
 
    ```js
    export { default as message1 } from "./message1";
@@ -31,14 +31,14 @@ This branch is intended to help narrow down the root cause of [issue #4565](http
 
 3. The default exports are the things returned by executing a function:
 
-   **message1.js**
+   **src/node_modules/fake-package/message1.js**
 
    ```js
    const getMessage1 = () => "Hello World!";
    export default getMessage1();
    ```
 
-   **message2.js**
+   **src/node_modules/fake-package/message2.js**
 
    ```js
    const getMessage2 = () => "Goodbye World!";
@@ -47,7 +47,7 @@ This branch is intended to help narrow down the root cause of [issue #4565](http
 
 Then, in the main app, we import an use only one of the exports (`message1`):
 
-**index.ts**
+**src/index.ts**
 
 ```ts
 import { message1 } from "fake-package";

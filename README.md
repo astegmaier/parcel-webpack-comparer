@@ -8,26 +8,99 @@ After the build output is generated, you can run `yarn analyze` to generate a co
 
 ## simple-export branch
 
-This branch is intended to test parcel and webpack's ability to tree-shake modules that contain re-export statements.
+This branch is intended to help narrow down the root cause of [issue #4565](https://github.com/parcel-bundler/parcel/issues/4565) and find the set of conditions where webpack will succeed at tree-shaking, but parcel will fail.
 
-`src/node_modules/fake-package` contains a fake module that has the following re-export:
+`src/node_modules/fake-package` has the following:
 
-```js
-export * from "./stuff";
-```
+1. An index file that re-exports everything another file:
 
-`stuff.js` contains two functions:
+**index.js**
 
 ```js
-export function addStuff(a, b) {
-  console.log("Adding some stuff:", a, b);
-  return a + b;
-}
+export * from "./messages";
+```
 
-export function multiplyStuff(a, b) {
-  console.log("Multiplying some stuff:", a, b);
-  return a * b;
+2. The file re-exported by `index.js` contains statement that re-export the default exports of some other files:
+
+**messages.js**
+
+```js
+export { default as message1 } from "./message1";
+export { default as message2 } from "./message2";
+```
+
+3. The default exports are the things returned by executing a function:
+
+**message1.js**
+
+```js
+const getMessage1 = () => "Hello World!";
+export default getMessage1();
+```
+
+**message2.js**
+
+```js
+const getMessage2 = () => "Goodbye World!";
+export default getMessage2();
+```
+
+Then, in the main app, we import an use only one of the exports (`message1`):
+
+**index.ts**
+
+```ts
+import { message1 } from "fake-package";
+
+ready(() => {
+  const root = document.getElementById("root");
+  if (root) {
+    root.textContent = message1;
+  }
+});
+
+function ready(fn: () => void) {
+  if (document.readyState != "loading") {
+    fn();
+  } else {
+    document.addEventListener("DOMContentLoaded", fn);
+  }
 }
 ```
 
-Only one of those function is actually used by the app. The goal is to see if parcel and webpack will tree-shake the unused function.
+When the bundle is built by webpack with tree-shaking, but without minification (`yarn build:webpack:raw`), you can see that the output was successfully tree-shaked - `message2` / "Goodbye World!" is not present.
+
+When the same bundle is built by parcel2 (`parcel build src/index.ts --noMinify`), `message2` / "Goodbye World!" is still in the bundle even though it is unused by the app.
+
+Here is the bundle out put from parcel:
+
+```js
+(function () {
+  // ASSET: /Users/Andrew/Projects/parcel-webpack-comparer/src/node_modules/fake-package/messages.js
+  // ASSET: /Users/Andrew/Projects/parcel-webpack-comparer/src/node_modules/fake-package/message1.js
+  const $ddbb96709a4990d332eedf0727c5879$var$getMessage1 = () => "Hello World!";
+
+  var $ddbb96709a4990d332eedf0727c5879$export$default = $ddbb96709a4990d332eedf0727c5879$var$getMessage1();
+
+  const $d3a229d82d83fefab2a3266a3adfcbac$var$getMessage2 = () =>
+    "Goodbye World!";
+
+  var $d3a229d82d83fefab2a3266a3adfcbac$export$default = $d3a229d82d83fefab2a3266a3adfcbac$var$getMessage2();
+  $b04660a404e967a338647ceb28cef6e$var$ready(function () {
+    var root = document.getElementById("root");
+
+    if (root) {
+      root.textContent = $ddbb96709a4990d332eedf0727c5879$export$default;
+    }
+  });
+
+  function $b04660a404e967a338647ceb28cef6e$var$ready(fn) {
+    if (document.readyState != "loading") {
+      fn();
+    } else {
+      document.addEventListener("DOMContentLoaded", fn);
+    }
+  }
+})();
+//# sourceMappingURL=parcel-webpack-comparer.5ad8aacb.js.map
+```

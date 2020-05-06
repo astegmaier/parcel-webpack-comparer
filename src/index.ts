@@ -7,7 +7,7 @@ ready(() => {
   }
 });
 
-function ready(fn: any) {
+function ready(fn: () => void) {
   if (document.readyState != "loading") {
     fn();
   } else {

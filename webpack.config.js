@@ -43,7 +43,7 @@ module.exports = (env, argv) => {
   const config = {
     mode: isProduction ? "production" : "development",
     entry: {
-      main: "./src/index.tsx",
+      main: "./src/index.ts",
     },
     devtool: "source-map",
     output: {

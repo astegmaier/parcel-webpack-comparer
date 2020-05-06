@@ -1,9 +1,9 @@
-import { message, addStuff } from "fake-package";
+import { message1 } from "fake-package";
 
 ready(() => {
   const root = document.getElementById("root");
   if (root) {
-    root.textContent = message + addStuff(3, 2);
+    root.textContent = message1;
   }
 });
 

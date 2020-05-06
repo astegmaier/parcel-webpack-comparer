@@ -83,20 +83,26 @@ When the bundle is built by webpack with tree-shaking, but without minification 
 
 When the same bundle is built by parcel2 (`parcel build src/index.ts --noMinify`), `message2` / "Goodbye World!" is still in the bundle even though it is unused by the app. The same string ("Goodbye World!") is present in the minified build.
 
-Here is the bundle out put from parcel:
+Here is the (unminified) bundle out put from parcel:
 
 ```js
 (function () {
   // ASSET: /Users/Andrew/Projects/parcel-webpack-comparer/src/node_modules/fake-package/messages.js
   // ASSET: /Users/Andrew/Projects/parcel-webpack-comparer/src/node_modules/fake-package/message1.js
-  const $ddbb96709a4990d332eedf0727c5879$var$getMessage1 = () => "Hello World!";
+  // ASSET: /Users/Andrew/Projects/parcel-webpack-comparer/src/node_modules/fake-package/wrapper.js
+  function $baa56c52e94c37cfa6e4f688d9d4f65$export$wrapper(string) {
+    console.log("I just wrapped a string: ", string);
+    return string;
+  }
 
-  var $ddbb96709a4990d332eedf0727c5879$export$default = $ddbb96709a4990d332eedf0727c5879$var$getMessage1();
-
-  const $d3a229d82d83fefab2a3266a3adfcbac$var$getMessage2 = () =>
-    "Goodbye World!";
-
-  var $d3a229d82d83fefab2a3266a3adfcbac$export$default = $d3a229d82d83fefab2a3266a3adfcbac$var$getMessage2();
+  const $ddbb96709a4990d332eedf0727c5879$var$message1 = "Hello World!";
+  var $ddbb96709a4990d332eedf0727c5879$export$default = $baa56c52e94c37cfa6e4f688d9d4f65$export$wrapper(
+    $ddbb96709a4990d332eedf0727c5879$var$message1
+  );
+  const $d3a229d82d83fefab2a3266a3adfcbac$var$message2 = "Goodbye World!";
+  var $d3a229d82d83fefab2a3266a3adfcbac$export$default = $baa56c52e94c37cfa6e4f688d9d4f65$export$wrapper(
+    $d3a229d82d83fefab2a3266a3adfcbac$var$message2
+  );
   $b04660a404e967a338647ceb28cef6e$var$ready(function () {
     var root = document.getElementById("root");
 
@@ -113,5 +119,5 @@ Here is the bundle out put from parcel:
     }
   }
 })();
-//# sourceMappingURL=parcel-webpack-comparer.5ad8aacb.js.map
+//# sourceMappingURL=parcel-webpack-comparer.86a5affc.js.map
 ```

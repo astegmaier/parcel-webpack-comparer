@@ -1,4 +1,4 @@
-import type { ExploreBundleResult, OutputFormat, ExploreResult, FileData } from "source-map-explorer/dist/types";
+import type { ExploreBundleResult, OutputFormat, ExploreResult, FileData } from "source-map-explorer/lib/types";
 import { saveOutputs } from "./saveOutputs";
 
 /**
@@ -37,7 +37,7 @@ function analyzeAdditions(baseBundle: ExploreBundleResult, comparisonBundle: Exp
     unmappedBytes: Math.max((comparisonBundle.unmappedBytes ?? 0) - (baseBundle.unmappedBytes ?? 0), 0),
     eolBytes: Math.max(comparisonBundle.eolBytes - baseBundle.eolBytes, 0),
     sourceMapCommentBytes: Math.max(comparisonBundle.sourceMapCommentBytes - baseBundle.sourceMapCommentBytes, 0),
-    totalBytes: Math.max(comparisonBundle.totalBytes - baseBundle.totalBytes, 0)
+    totalBytes: Math.max(comparisonBundle.totalBytes - baseBundle.totalBytes, 0),
   };
 
   // Do the same analysis on each file.
@@ -47,7 +47,7 @@ function analyzeAdditions(baseBundle: ExploreBundleResult, comparisonBundle: Exp
     if (baselineAssetInfo) {
       const additionsAssetInfo: FileData = {
         size: Math.max(newAssetInfo.size - baselineAssetInfo.size, 0),
-        coveredSize: Math.max((newAssetInfo.coveredSize ?? 0) - (baselineAssetInfo.coveredSize ?? 0), 0)
+        coveredSize: Math.max((newAssetInfo.coveredSize ?? 0) - (baselineAssetInfo.coveredSize ?? 0), 0),
       };
       additionsBundle.files[newAssetName] = additionsAssetInfo;
     }

@@ -1,4 +1,5 @@
-import type { OutputFormat } from "source-map-explorer/dist/types";
+import type { OutputFormat } from "source-map-explorer/lib/types";
+// import type { OutputFormat } from "./types";
 import { argv } from "yargs";
 
 /**

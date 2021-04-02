@@ -6,11 +6,11 @@ import React from "react";
 // import teamsTheme from "@fluentui/react-northstar/dist/es/themes/teams";
 
 // Less granular imports (relying on index files that re-export stuff) gives a larger bundle (~1.1MB).
-import { Provider, themes, Box } from "@fluentui/react-northstar";
+import { Provider, teamsTheme, Box } from "@fluentui/react-northstar";
 
 const App = () => (
-  <Provider theme={themes.teams}>
-    <Box content="Hello from FluentUI" />
+  <Provider theme={teamsTheme}>
+    <Box content="Hello from FluentUI with a string change!" />
   </Provider>
 );
 

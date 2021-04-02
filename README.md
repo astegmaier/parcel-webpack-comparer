@@ -31,6 +31,26 @@ All scenarios (both parcel and webpack) are:
 - not doing any typechecking.
 - On a MacBook Pro (13-inch, Early 2015) with 2.7 GHz Dual-Core Intel Core i5 and 16 GB RAM.
 
+| Scenario                                     | Trial 1 | Trial 2 | Trial 3 | Average |
+| -------------------------------------------- | ------- | ------- | ------- | ------- |
+| parcel build - no cache                      | 21.1s   | 15.1s   | 15.2s   |         |
+| parcel build - with cache, no changes        |         | 0.8s    | 1.6s    |         |
+| parcel build - with cache, one string change |         |         | 6.2s    |         |
+| webpack build - after clearing Terser cache  | 13.3s   |         |         |         |
+| webpack build - with Terser cache            |         |         |         |         |
+
+## Old Test Results
+
+Here's a comparison of Parcel v. Webpack build times in various scenarios.
+
+All scenarios (both parcel and webpack) are:
+
+- doing production builds (i.e. including tree-shaking, scope-hoisting, and minification)
+- using babel for transpilation (with default config in `parcel` and `babel-loader` for webpack).
+- generating sourcemaps.
+- not doing any typechecking.
+- On a MacBook Pro (13-inch, Early 2015) with 2.7 GHz Dual-Core Intel Core i5 and 16 GB RAM.
+
 | Scenario                                             | Trial 1 | Trial 2 | Trial 3 | Average   |
 | ---------------------------------------------------- | ------- | ------- | ------- | --------- |
 | parcel build - no cache                              | 44.8s   | 43.7s   | 46.7s   | **45.1s** |

@@ -10,7 +10,7 @@ import { Provider, teamsTheme, Box } from "@fluentui/react-northstar";
 
 const App = () => (
   <Provider theme={teamsTheme}>
-    <Box content="Hello from FluentUI with a string change!" />
+    <Box content="Hello from FluentUI!" />
   </Provider>
 );
 
